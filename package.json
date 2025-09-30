@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "postinstall": "chmod +x node_modules/.bin/astro",
+    "build": "npx astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

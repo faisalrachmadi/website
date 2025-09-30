@@ -2,6 +2,9 @@
   "name": "faisal-rachmadi-website",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -10,6 +13,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.0.0"
+    "@astrojs/check": "^0.9.4",
+    "astro": "^4.0.0",
+    "typescript": "^5.9.2"
   }
 }

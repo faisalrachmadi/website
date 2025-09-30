@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Format tanggal menjadi format Indonesia
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('id-ID', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+// Get all blog posts from Content Collections
+const blogPosts = await getCollection('blog');
+
+// Sort posts by date (newest first)
+const sortedPosts = blogPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<Layout title="Blog - Faisal Rachmadi" description="Blog Faisal Rachmadi tentang Digital Marketing, Affiliate Marketing, dan Radio Broadcasting">
+  <style>
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .page-header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    
+    .blog-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    .blog-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .blog-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    
+    .blog-card h2 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .blog-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .blog-summary {
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .read-more {
+      display: inline-block;
+      background: #007bff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    
+    .read-more:hover {
+      background: #0056b3;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+    
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 2rem;
+      }
+      
+      .blog-card {
+        padding: 1.5rem;
+      }
+      
+      .blog-card h2 {
+        font-size: 1.3rem;
+      }
+      
+      .blog-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+
+  <div class="page-header">
+    <h1>Blog</h1>
+    <p>Artikel terbaru tentang Digital Marketing, Affiliate, dan Radio Broadcasting</p>
+  </div>
+
+  <div class="blog-list">
+    {sortedPosts.length === 0 ? (
+      <div class="empty-state">
+        <h3>Belum ada artikel</h3>
+        <p>Artikel akan segera tersedia.</p>
+      </div>
+    ) : (
+      sortedPosts.map((post) => (
+        <article class="blog-card">
+          <h2>{post.data.title}</h2>
+          <div class="blog-meta">
+            <span>📅 {formatDate(post.data.date)}</span>
+            <span>⏱️ {post.data.readTime}</span>
+          </div>
+          <p class="blog-summary">{post.data.summary}</p>
+          <a href={`/blog/${post.slug}/`} class="read-more">
+            Baca Selengkapnya →
+          </a>
+        </article>
+      ))
+    )}
+  </div>
+</Layout>
